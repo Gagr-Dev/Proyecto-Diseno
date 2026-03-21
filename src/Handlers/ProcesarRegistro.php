@@ -12,10 +12,10 @@ function manejarRegistroUsuario(array $postData) {
         return ['exito' => false, 'mensajes' => $errores];
     }
     
-    // 2. Preparar Datos (Mundo Puro)
+    // 2. Preparar Datos
     $datosLimpios = prepararUsuarioParaBD($postData);
     
-    // 3. Guardar en BD (Efecto Secundario)
+    // 3. Guardar en BD 
     $conexion = obtenerConexion();
     try {
         guardarUsuarioBD($conexion, $datosLimpios);
