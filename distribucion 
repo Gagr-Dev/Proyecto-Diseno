@@ -1,0 +1,32 @@
+licoreria_app/
+│
+├── public/                 # Único punto de acceso público (Seguridad)
+│   ├── index.php           # Front-controller (recibe todas las peticiones)
+│   ├── css/                # Tus estilos personalizados (si los hay)
+│   ├── js/                 # Scripts del frontend
+│   └── assets/             # Imágenes (logos, etc.)
+│
+├── src/                    # Código fuente de tu aplicación (El Backend)
+│   │
+│   ├── Domain/             # EL NÚCLEO FUNCIONAL (Funciones Puras)
+│   │   ├── CalculadoraCajas.php  # Lógica de (cantidad / 36)
+│   │   ├── ReglasVenta.php       # Funciones que calculan subtotales y totales
+│   │   └── GeneradorEventos.php  # Construye los arrays para la base de datos
+│   │
+│   ├── Infrastructure/     # LA ENVOLTURA (Efectos Secundarios / I/O)
+│   │   ├── Database.php          # Conexión a MySQL con PDO
+│   │   ├── RepositorioVenta.php  # Funciones que ejecutan los INSERTS
+│   │   └── RepositorioStock.php  # Funciones que ejecutan los SELECTS (SUM)
+│   │
+│   └── Handlers/           # Los "Controladores" funcionales
+│       ├── ProcesarVenta.php     # Une el Input -> Domain -> Infrastructure
+│       └── MostrarInventario.php 
+│
+├── views/                  # El Frontend (HTML + PHP embebido + Bootstrap)
+│   ├── layouts/            # Plantilla base (header, navbar, footer)
+│   ├── inventario/         # Vistas de listado de stock
+│   ├── ventas/             # Vista del punto de venta (caja registradora)
+│   └── usuarios/           # Vistas de gestión de roles y bitácora
+│
+└── config/                 # Configuración del sistema
+    └── env.php             # Credenciales de base de datos (NO se sube a GitHub)
