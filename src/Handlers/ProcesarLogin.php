@@ -31,6 +31,13 @@ function manejarLogin(array $postData): array {
     $_SESSION['primer_nombre'] = $usuarioBD['primer_nombre'];
     $_SESSION['primer_apellido'] = $usuarioBD['primer_apellido'];
     $_SESSION['rol_id'] = $usuarioBD['rol_id'];
+    $_SESSION['login_reciente'] = true;
+
+    // Registrar en bitácora
+    require_once __DIR__ . '/../Infrastructure/RepositorioBitacora.php';
+    registrarBitacora($conexion, $usuarioBD['id'], 'Inicio de sesión', 'Usuario', $usuarioBD['id'], [
+        'username' => $username
+    ]);
 
     return ['exito' => true, 'mensaje' => 'Login exitoso.'];
 }

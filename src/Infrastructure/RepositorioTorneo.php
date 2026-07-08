@@ -86,3 +86,26 @@ function obtenerTodosLosTorneos(PDO $conexion): array {
     $stmt->execute();
     return $stmt->fetchAll();
 }
+
+function obtenerTablaPosiciones(PDO $conexion, int $idTorneo): array {
+    $sql = "SELECT 
+                te.id AS equipo_id,
+                te.nombre_equipo AS nombre,
+                COUNT(tp.id) AS jj,
+                SUM(CASE WHEN tp.ganador_id = te.id THEN 1 ELSE 0 END) AS jg,
+                SUM(CASE WHEN tp.estado = 'Jugado' AND tp.ganador_id != te.id THEN 1 ELSE 0 END) AS jp,
+                CASE 
+                    WHEN COUNT(tp.id) > 0 THEN 
+                        ROUND((SUM(CASE WHEN tp.ganador_id = te.id THEN 1 ELSE 0 END) / COUNT(tp.id)) * 1000)
+                    ELSE 0 
+                END AS avg
+            FROM Torneo_Equipo te
+            LEFT JOIN Torneo_Partido tp ON te.id = tp.equipo_local_id OR te.id = tp.equipo_visitante_id
+            WHERE te.torneo_id = :torneo_id AND (tp.estado = 'Jugado' OR tp.id IS NULL)
+            GROUP BY te.id, te.nombre_equipo
+            ORDER BY avg DESC, jg DESC, nombre ASC";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute([':torneo_id' => $idTorneo]);
+    return $stmt->fetchAll();
+}
